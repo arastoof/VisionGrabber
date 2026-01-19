@@ -1,0 +1,271 @@
+<Window x:Class="VisionGrabber.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+        Title="VisionGrabber Settings" Height="500" Width="600"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Icon="icon.ico"
+        Background="{StaticResource Brush_Background}" 
+        Foreground="{StaticResource Brush_TextPrimary}"
+        BorderBrush="{StaticResource Brush_Border}"
+        BorderThickness="1">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="1" CornerRadius="0" CaptionHeight="32" UseAeroCaptionButtons="False" ResizeBorderThickness="4"/>
+    </WindowChrome.WindowChrome>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <Grid Grid.Row="0" Background="{StaticResource Brush_Surface}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Settings" VerticalAlignment="Center" Margin="15,0,0,0" Foreground="{StaticResource Brush_TextSecondary}" FontSize="12"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button Style="{StaticResource TitleBarButtonStyle}" Click="Minimize_Click" ToolTip="Minimize">
+                    <Button.Content>
+                        M0,8 H10
+                    </Button.Content>
+                </Button>
+                <Button Style="{StaticResource TitleBarCloseButtonStyle}" Click="Close_Click" ToolTip="Close">
+                    <Button.Content>
+                        M1,1 L9,9 M1,9 L9,1
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TabControl Margin="-5,0,-5,0">
+            
+                <TabItem Header="General">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="5,15,5,15">
+                            <TextBlock Text="Configure how VisionGrabber starts and how it processes screenshots." Style="{StaticResource Style_TabDescription}"/>
+
+                            <TextBlock Text="Startup" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}" Margin="0,0,0,10"/>
+                            <Grid Margin="0,0,0,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,15,0">
+                                    <TextBlock Text="Primary Engine on Startup:"/>
+                                    <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The AI engine that will be automatically selected when the application starts."/>
+                                </StackPanel>
+                                <ComboBox x:Name="DefaultBackendCombo" Grid.Column="1" HorizontalAlignment="Left" Width="200" SelectedIndex="1">
+                                    <ComboBoxItem Content="Local"/>
+                                    <ComboBoxItem Content="Cloud (Google Gemini)"/>
+                                    <ComboBoxItem Content="Networked llama-server"/>
+                                    <ComboBoxItem Content="Networked VisionGrabber Server"/>
+                                </ComboBox>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Shortcuts" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="Global hotkey to trigger a screenshot capture even when the app is minimized."/>
+                            </StackPanel>
+                            <TextBlock Text="Global Capture Hotkey:" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <CheckBox x:Name="KeyCtrl" Content="Ctrl" Margin="0,0,10,0"/>
+                                <CheckBox x:Name="KeyShift" Content="Shift" Margin="0,0,10,0"/>
+                                <CheckBox x:Name="KeyAlt" Content="Alt" Margin="0,0,10,0"/>
+                                <CheckBox x:Name="KeyWin" Content="Win" Margin="0,0,10,0"/>
+                                <TextBox x:Name="KeyChar" Width="40" MaxLength="1" CharacterCasing="Upper" TextAlignment="Center"/>
+                            </StackPanel>
+                            <TextBlock Text="Restart required to apply hotkey changes." FontSize="11" Foreground="{StaticResource Brush_TextDisabled}" Margin="0,0,0,20"/>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="Processing" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The base instructions sent to the AI. You can use 'Generation Modes' in the main window to quickly switch between different prompts."/>
+                            </StackPanel>
+                            <TextBlock Text="System/Custom Prompt:" Margin="0,0,0,5"/>
+                            <TextBox x:Name="PromptBox" Height="100" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" FontSize="13"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Local Model">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="5,15,5,15">
+                            <TextBlock Text="Run AI models directly on your computer using Llama.cpp. Fast and private, but requires compatible hardware." Style="{StaticResource Style_TabDescription}"/>
+                            
+                            <TextBlock Text="Llama.cpp Configuration" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}" Margin="0,0,0,15"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Server Executable (llama-server.exe):"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The path to the llama-server.exe file provided by Llama.cpp."/>
+                            </StackPanel>
+                            <Grid Margin="0,5,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="LlamaPathBox" Grid.Column="0"/>
+                                <Button Content="..." Grid.Column="1" Click="BrowseLlama_Click" Margin="5,0,0,0" Width="30" Padding="0"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Model File (.gguf):"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The LLM model file in GGUF format (e.g. Llama-3-8B-Instruct.gguf)."/>
+                            </StackPanel>
+                            <Grid Margin="0,5,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="ModelPathBox" Grid.Column="0"/>
+                                <Button Content="..." Grid.Column="1" Click="BrowseModel_Click" Margin="5,0,0,0" Width="30" Padding="0"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="MMProj File (Optional):"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="Required for vision capabilities with specific models like LLaVA or Moondream."/>
+                            </StackPanel>
+                            <Grid Margin="0,5,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="MmprojPathBox" Grid.Column="0"/>
+                                <Button Content="..." Grid.Column="1" Click="BrowseMmproj_Click" Margin="5,0,0,0" Width="30" Padding="0"/>
+                            </Grid>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                <TextBlock Text="Server Port:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The local port the Llama server will listen on." Margin="0,0,10,0"/>
+                                <TextBox x:Name="LlamaPortBox" Width="80"/>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                <TextBlock Text="Context Size:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The context window size for the Llama server (e.g. 2048, 4096, 8192). Higher values use more VRAM." Margin="0,0,10,0"/>
+                                <TextBox x:Name="LlamaContextSizeBox" Width="80"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox x:Name="StartupCheck" Content="Start Llama Server automatically"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="If checked, VisionGrabber will attempt to launch the Llama server process whenever it needs to process an image."/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+                
+                <TabItem Header="Cloud Model">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="5,15,5,15">
+                            <TextBlock Text="Connect to Google's Gemini models. Requires an internet connection and a API key from Google AI Studio." Style="{StaticResource Style_TabDescription}"/>
+                            
+                            <TextBlock Text="Google Gemini Configuration" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}" Margin="0,0,0,15"/>
+                            
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Model ID:"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The specific Gemini model to use (e.g. gemini-2.0-flash-lite)."/>
+                            </StackPanel>
+                            <TextBox x:Name="GeminiModelBox" Margin="0,5,0,15"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="API Key:"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="Your private Google AI Studio API key. Keeps this secret!"/>
+                            </StackPanel>
+                            <PasswordBox x:Name="GeminiKeyBox" Background="{StaticResource Brush_Surface}" Foreground="{StaticResource Brush_TextPrimary}" BorderBrush="{StaticResource Brush_Border}" Padding="5" Margin="0,5,0,5"/>
+                            <TextBlock Text="Stored securely in local app settings." FontSize="11" Foreground="{StaticResource Brush_TextDisabled}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Remote Model">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="5,15,5,15">
+                            <TextBlock Text="Connect to a Llama server already running on another machine. Useful if you have a powerful PC at home." Style="{StaticResource Style_TabDescription}"/>
+
+                            <TextBlock Text="Remote Llama Configuration" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}" Margin="0,0,0,15"/>
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Server Address (IP:Port):"/>
+                                <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The URL of the remote Llama server (e.g. http://192.168.1.10:8081)."/>
+                            </StackPanel>
+                            <TextBox x:Name="RemoteAddressBox" Margin="0,5,0,15"/>
+                            <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="{StaticResource Brush_TextDisabled}">
+                                <Run>Llama-server should be running on the remote machine. To launch llama-server in this way, in an elevated terminal on the server, run the command:</Run>
+                                <LineBreak/>
+                                <Run FontFamily="Consolas" Foreground="{StaticResource Brush_TextPrimary}">llama-server.exe -m "&lt;model path.gguf&gt;" --mmproj "&lt;mmproj path.mmproj&gt;" --port &lt;port&gt; --host 0.0.0.0</Run>
+                            </TextBlock>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+
+                <TabItem Header="Relay">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="5,15,5,15">
+                            <TextBlock Text="The Relay system lets two instances of VisionGrabber talk to each other. One acts as the processing engine (Server) and the other sends screenshots (Client)." Style="{StaticResource Style_TabDescription}"/>
+
+                            <TextBlock Text="Relay System (Client/Server)" FontWeight="SemiBold" Foreground="{StaticResource Brush_TextPrimary}" Margin="0,0,0,15"/>
+                            
+                            <!-- Server Section -->
+                            <Border BorderBrush="{StaticResource Brush_Border}" BorderThickness="1" CornerRadius="4" Padding="15" Margin="0,0,0,20">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="Server Mode" FontWeight="SemiBold"/>
+                                        <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="Turn this on if you want THIS computer to process images for other devices."/>
+                                    </StackPanel>
+                                    <CheckBox x:Name="RelayServerEnabledCheck" Content="Enable Relay Server" Margin="0,0,0,10"/>
+                                    
+                                    <Grid Margin="0,0,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0">
+                                            <TextBlock Text="Port:"/>
+                                            <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="The port the Relay Server will listen on for incoming client requests."/>
+                                        </StackPanel>
+                                        <TextBox x:Name="RelayServerPortBox" Grid.Column="1" Width="80" HorizontalAlignment="Left"/>
+                                        <Button Content="Copy IP for Clients" Grid.Column="2" Click="CopyIP_Click" Padding="10,2" ToolTip="Copies your local IP address so you can paste it into the client VisionGrabber."/>
+                                    </Grid>
+                                    
+                                    <CheckBox x:Name="DisplayRelayResultsCheck" Content="Show results on this screen too" Margin="0,0,0,5"/>
+                                    <TextBlock Text="If enabled, this app will act as a server for other VisionGrabber instances." FontSize="11" Foreground="{StaticResource Brush_TextDisabled}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Client Section -->
+                            <Border BorderBrush="{StaticResource Brush_Border}" BorderThickness="1" CornerRadius="4" Padding="15">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="Client Mode" FontWeight="SemiBold"/>
+                                        <ContentControl Style="{StaticResource Style_HelpIcon}" ToolTip="If you are using this computer to capture images and send them to another computer for processing."/>
+                                    </StackPanel>
+                                    <TextBlock Text="Relay Server Address (from the other PC):"/>
+                                    <TextBox x:Name="RelayClientAddressBox" Margin="0,5,0,10"/>
+                                    <TextBlock Text="Note: To use this client, select 'Relay (Client)' in the main window backend selector." FontSize="11" Foreground="{StaticResource Brush_TextDisabled}"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </ScrollViewer>
+                </TabItem>
+            </TabControl>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Content="Save Settings" Click="Save_Click" Style="{StaticResource Style_ButtonPrimary}" Width="120" Margin="0,0,10,0"/>
+                <Button Content="Cancel" Click="Cancel_Click" Width="80"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

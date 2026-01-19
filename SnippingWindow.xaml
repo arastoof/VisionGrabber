@@ -1,0 +1,26 @@
+<Window x:Class="VisionGrabber.SnippingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SnippingWindow" WindowStyle="None" ResizeMode="NoResize"
+        Topmost="True" Cursor="Cross" AllowsTransparency="True"
+        ShowInTaskbar="False" Background="Transparent">
+    <Canvas Name="DrawingCanvas" MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove" MouseUp="Canvas_MouseUp">
+        <Image Name="BackgroundScreen" Stretch="Fill" Opacity="1.0"/>
+        
+        <!-- Dimmed Overlay with Hole -->
+        <Path Name="OverlayPath" Fill="#80000000">
+            <Path.Data>
+                <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                        <RectangleGeometry x:Name="FullOverlayRect"/>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                        <RectangleGeometry x:Name="SelectionHoleRect"/>
+                    </CombinedGeometry.Geometry2>
+                </CombinedGeometry>
+            </Path.Data>
+        </Path>
+
+        <Rectangle Name="SelectionRect" Stroke="Red" StrokeThickness="2" Visibility="Collapsed" StrokeDashArray="2 1"/>
+    </Canvas>
+</Window>
