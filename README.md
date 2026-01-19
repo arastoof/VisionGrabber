@@ -13,9 +13,9 @@ VisionGrabber is a desktop application that lets you capture any part of your sc
 ---
 
 ## Getting Started
+- Download and install the [.NET runtime]([https://dotnet.microsoft.com/en-us/download](https://dotnet.microsoft.com/en-us/download/dotnet/10.0/runtime)) for Desktop Apps if you don't have it already. You'll need at least version 8. 
 
 ### Prerequisites
-- **[.NET SDK](https://dotnet.microsoft.com/download/dotnet)** (8.0 or later).
 #### For Local Processing:
 - **[llama-server.exe](https://github.com/ggml-org/llama.cpp/releases)**: Essential for local LLMs.
   - *Nvidia GPUs*: Use the **CUDA** version (requires [CUDA toolkit](https://developer.nvidia.com/cuda/toolkit)).
@@ -31,7 +31,7 @@ VisionGrabber is a desktop application that lets you capture any part of your sc
 ### Installation
 
 1. **Pre-Built**: Download the latest release from the [GitHub Releases](https://github.com/arastoof/VisionGrabber/releases) page.
-2. **From Source**:
+2. **From Source**: You'll need the **[.NET SDK](https://dotnet.microsoft.com/download/dotnet)** (8.0 or later). Then, just run
    ```bash
    git clone https://github.com/your-username/VisionGrabber.git
    cd VisionGrabber
@@ -48,4 +48,5 @@ VisionGrabber is a desktop application that lets you capture any part of your sc
    - **Cloud**: Paste your Gemini API key.
    - **Remote**: Enter the IP and port of a networked `llama-server`.
    - **Relay**: Enable "Run Relay Server" on a host machine to process images for other clients.
+
 3. **Capture**: Select your backend from the dropdown, click capture, and wait for the results.
