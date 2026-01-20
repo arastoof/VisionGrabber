@@ -2,8 +2,9 @@
 
 VisionGrabber is a desktop application that lets you capture any part of your screen and process the visual data using LLMs. It is especially useful for processing screenshots of tables (able to give outputs in markdown or HTML), math formulae (able to give outputs in LaTeX), and other formatted text. VisionGrabber allows you to do both local models for privacy and flexibility, and cloud processing for performance.
 
-<img src="https://github.com/arastoof/VisionGrabber/blob/main/Screenshot.png?raw=true">
-In the above image, a screenshot was taken of the PDF (on the left), and VisionGrabber (on the right) was able to accurately recreate it. 
+https://github.com/user-attachments/assets/8fd8ed36-489a-40c9-b3d8-571a021752ee
+
+In the above video, a screenshot was taken of the PDF (on the left), and VisionGrabber (on the right) was able to accurately recreate it. 
 
 ## Features
 
@@ -53,4 +54,5 @@ In the above image, a screenshot was taken of the PDF (on the left), and VisionG
    - **Relay**: Enable "Run Relay Server" on a host machine to process images for other clients.
 
 3. **Capture**: Select your backend from the dropdown, click capture, and wait for the results.
+
 
